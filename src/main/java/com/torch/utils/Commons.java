@@ -1,6 +1,6 @@
 package com.torch.utils;
 
-import com.itheima.model.domain.Article;
+import com.torch.model.domain.Article;
 import com.vdurmont.emoji.EmojiParser;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
