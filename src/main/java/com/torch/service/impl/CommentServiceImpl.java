@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.torch.dao.CommentMapper;
 import com.torch.dao.StatisticMapper;
 import com.torch.model.domain.Comment;
+import com.torch.model.domain.Statistic;
 import com.torch.service.ICommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,5 +34,15 @@ public class CommentServiceImpl implements ICommentService {
         PageInfo<Comment> commentPageInfo = new PageInfo<>(commentList);
 
         return commentPageInfo;
+    }
+
+
+    @Override
+    public void pushComment(Comment comment){
+        commentMapper.pushComment(comment);
+        // 更新文章评论数据量
+        Statistic statistic = statisticMapper.selectStatisticWithArticleId(comment.getArticleId());
+        statistic.setCommentsNum(statistic.getCommentsNum()+1);
+        statisticMapper.updateArticleCommentsWithId(statistic);
     }
 }

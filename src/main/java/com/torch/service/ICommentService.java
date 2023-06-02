@@ -17,4 +17,10 @@ public interface ICommentService {
      * @return 返回评论
      */
     public PageInfo<Comment> getComments(Integer aid, int page, int count);
+
+    /**
+     * 用户发表评论
+     * @param comment
+     */
+    public void pushComment(Comment comment);
 }
