@@ -8,6 +8,7 @@ import com.torch.model.domain.Article;
 import com.torch.model.domain.Statistic;
 import com.torch.service.IArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -60,5 +61,29 @@ public class ArticleServiceImpl implements IArticleService {
             }
         }
         return articlelist;
+    }
+
+    @Autowired
+    private RedisTemplate redisTemplate;
+
+    @Override
+    public Article selectArticleWithId(Integer id) {
+        // 需要引入redis做缓存处理
+        Article article = null;
+        // 从redis里面拿数据
+        Object o =  redisTemplate.opsForValue().get("article_" + id);
+        // 判断这个数据是否有数据存在
+        if(o != null) {
+            article = (Article) o;
+        } else {
+            // 如果没有数据那么需要查询数据库
+            article = articleMapper.selectArticleWithId(id);
+            // 判断这个文章是否有数据
+            if(article != null) {
+                // 以key value 形式存储 所以set的时候 (key,value)
+                redisTemplate.opsForValue().set("article_" + id, article);
+            }
+        }
+        return article;
     }
 }

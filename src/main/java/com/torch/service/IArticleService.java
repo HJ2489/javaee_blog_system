@@ -25,4 +25,11 @@ public interface IArticleService {
      * @return
      */
     public List<Article> getHeatArticles();
+
+    /**
+     * 根据id查询单个文章详情
+     * @param id
+     * @return
+     */
+    public Article selectArticleWithId(Integer id);
 }
