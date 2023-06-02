@@ -32,4 +32,24 @@ public interface IArticleService {
      * @return
      */
     public Article selectArticleWithId(Integer id);
+
+    /**
+     * 发布文章
+     * @param article
+     */
+    public void publish(Article article);
+
+
+    /**
+     * 根据主键更新文章
+     * @param article
+     */
+    public void updateArticleWithId(Article article);
+
+
+    /**
+     * 删除文章
+     * @param id
+     */
+    public void deleteArticleWithId(int id);
 }
