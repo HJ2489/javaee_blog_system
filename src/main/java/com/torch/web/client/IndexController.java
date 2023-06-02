@@ -1,0 +1,53 @@
+package com.torch.web.client;
+
+import com.github.pagehelper.PageInfo;
+import com.torch.model.domain.Article;
+import com.torch.model.domain.Comment;
+import com.torch.service.IArticleService;
+import org.apache.commons.lang3.StringUtils;
+import jakarta.servlet.http.HttpServletRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
+
+/**
+ * @author: Torch
+ * @Date: 2023/06/01 21:33
+ * @Description:
+ */
+@Controller
+public class IndexController {
+    private static final Logger logger = LoggerFactory.getLogger(IndexController.class);
+
+
+    // 注入实现类，就能直接调用实现类的方法
+    @Autowired
+    private IArticleService articleServiceImpl;
+
+    // 博客首页，会自动跳转到文章页，进入博客首页，会在后面加上页码为1，每页显示5条数据
+    @GetMapping(value = "/")
+    private String index(HttpServletRequest request) {
+        return this.index(request, 1, 5);
+    }
+
+    // 文章页
+    @GetMapping(value = "/page/{p}")
+    public String index(HttpServletRequest request, @PathVariable("p") int page, @RequestParam(value = "count", defaultValue = "5") int count) {
+        // 查询分页数据
+        PageInfo<Article> articles = articleServiceImpl.selectArticleWithPage(page, count);
+        // 获取文章热度统计信息
+        List<Article> articleList = articleServiceImpl.getHeatArticles();
+
+        // 前端的数据展示，都是用的request域的数据
+        request.setAttribute("articles", articles);
+        request.setAttribute("articleList", articleList);
+        logger.info("分页获取文章信息: 页码 "+page+",条数 "+count);
+        return "client/index";
+    }
+}

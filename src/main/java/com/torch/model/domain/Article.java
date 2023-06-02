@@ -17,6 +17,7 @@ public class Article {
     private Boolean allowComment; // 是否允许评论，默认为true
     private String thumbnail;     // 文章缩略图
 
+    // 以下这两项属性不在数据库的article表中，是后续根据文章id在另一个表中查询得到的数据
     private Integer hits;       // 点击量
     private Integer commentsNum;  // 评论总量
 
