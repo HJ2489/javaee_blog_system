@@ -24,9 +24,9 @@ public class ScheduleTask {
     private String mailto;
 
     /**
-     * 每天中午12点发送一次
+     * 每月1号的中午12点发送一次
      */
-    @Scheduled(cron = "0 */1 * * * ?")
+    @Scheduled(cron = "0 0 12 1 * ?")
     public void sendEmail() {
         // 定制邮件内容
         long totalVisit = statisticMapper.getTotalVisit();
